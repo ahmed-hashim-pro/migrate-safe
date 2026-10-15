@@ -84,6 +84,10 @@ type LockSample struct {
 	Stmt    int                  // index of the statement running
 	Granted map[string]lint.Mode // strongest granted lock per table
 	Waiting bool                 // waiting for a lock
+	// Running: the backend was executing exactly this statement's text when
+	// the sample was taken (pg_stat_activity), not still finishing the one
+	// before it or idle in between.
+	Running bool
 }
 
 // sampler polls pg_locks and pg_stat_activity for the migration's backend.
@@ -94,7 +98,7 @@ type sampler struct {
 	pid     uint32
 	tick    time.Duration
 	origin  time.Time
-	current func() int
+	current func() (int, string)
 	mu      sync.Mutex
 	samples []LockSample
 }
@@ -105,13 +109,19 @@ FROM pg_locks l JOIN pg_class c ON c.oid = l.relation
 WHERE l.pid = $1 AND l.locktype = 'relation' AND c.relkind IN ('r', 'p')
   AND c.relnamespace NOT IN ('pg_catalog'::regnamespace, 'information_schema'::regnamespace)`
 
+const sampleQuery = `
+SELECT a.running, x.relname, x.mode, x.granted
+FROM (SELECT coalesce(bool_or(state = 'active' AND query = $2), false) AS running
+      FROM pg_stat_activity WHERE pid = $1) a
+LEFT JOIN (` + lockQuery + `) x ON true`
+
 func (s *sampler) run(ctx context.Context) error {
 	t := time.NewTicker(s.tick)
 	defer t.Stop()
 	for {
-		stmt := s.current()
+		stmt, sql := s.current()
 		at := time.Since(s.origin)
-		rows, err := s.conn.Query(ctx, lockQuery, s.pid)
+		rows, err := s.conn.Query(ctx, sampleQuery, s.pid, sql)
 		if ctx.Err() != nil {
 			return nil
 		}
@@ -120,18 +130,21 @@ func (s *sampler) run(ctx context.Context) error {
 		}
 		ls := LockSample{At: at, Stmt: stmt, Granted: map[string]lint.Mode{}}
 		for rows.Next() {
-			var rel, mode string
-			var granted bool
-			if err := rows.Scan(&rel, &mode, &granted); err != nil {
+			var rel, mode *string
+			var granted *bool
+			if err := rows.Scan(&ls.Running, &rel, &mode, &granted); err != nil {
 				return err
 			}
-			m, _ := lint.ParsePGLock(mode)
-			if !granted {
+			if rel == nil {
+				continue // no locks at all
+			}
+			m, _ := lint.ParsePGLock(*mode)
+			if !*granted {
 				ls.Waiting = true
 				continue
 			}
-			if m > ls.Granted[rel] {
-				ls.Granted[rel] = m
+			if m > ls.Granted[*rel] {
+				ls.Granted[*rel] = m
 			}
 		}
 		if err := rows.Err(); err != nil {
@@ -143,7 +156,7 @@ func (s *sampler) run(ctx context.Context) error {
 		// A sample is only kept if the same statement was running when the
 		// query was sent and when its answer came back; otherwise a lock
 		// taken by the next statement could be credited to this one.
-		if s.current() == stmt {
+		if now, _ := s.current(); now == stmt {
 			s.mu.Lock()
 			s.samples = append(s.samples, ls)
 			s.mu.Unlock()

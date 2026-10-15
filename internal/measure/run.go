@@ -225,8 +225,13 @@ func Measure(ctx context.Context, cfg Config, stmts []sqlparse.Statement) (*Run,
 	defer stopObs()
 	var obsWG sync.WaitGroup
 	obsErr := make(chan error, 2)
-	var current atomic.Int64
-	current.Store(-1)
+	// The statement running now, for the sampler: its index and exact text.
+	type running struct {
+		i   int
+		sql string
+	}
+	var current atomic.Pointer[running]
+	current.Store(&running{i: -1})
 
 	probeConn, err := open()
 	if err != nil {
@@ -239,7 +244,7 @@ func Measure(ctx context.Context, cfg Config, stmts []sqlparse.Statement) (*Run,
 		return nil, err
 	}
 	defer sampConn.Close(context.Background())
-	sm := &sampler{conn: sampConn, pid: pid, tick: cfg.Sample, origin: origin, current: func() int { return int(current.Load()) }}
+	sm := &sampler{conn: sampConn, pid: pid, tick: cfg.Sample, origin: origin, current: func() (int, string) { c := current.Load(); return c.i, c.sql }}
 	for _, f := range []func(context.Context) error{pr.run, sm.run} {
 		obsWG.Add(1)
 		go func(f func(context.Context) error) {
@@ -284,7 +289,7 @@ func Measure(ctx context.Context, cfg Config, stmts []sqlparse.Statement) (*Run,
 	var readers sync.WaitGroup
 	skipTx := false
 	for i, r := range run.Lint {
-		current.Store(int64(i))
+		current.Store(&running{i: i, sql: r.Stmt.SQL})
 		st := Stmt{Index: i, Line: r.Stmt.Line, SQL: r.Stmt.SQL, Kind: r.Kind}
 		if skipTx {
 			st.Skipped = true
@@ -327,7 +332,7 @@ func Measure(ctx context.Context, cfg Config, stmts []sqlparse.Statement) (*Run,
 		}
 		run.Statements = append(run.Statements, st)
 	}
-	current.Store(-1)
+	current.Store(&running{i: -1})
 	run.From, run.To = warm, warm
 	if len(run.Statements) > 0 {
 		run.From = run.Statements[0].From
@@ -377,7 +382,7 @@ func Measure(ctx context.Context, cfg Config, stmts []sqlparse.Statement) (*Run,
 				waited += s.At - prev.At
 			}
 			prev = s
-			if !st.LocksExact && s.At >= st.From && s.At <= st.To {
+			if !st.LocksExact && s.Running {
 				st.LockSamples++
 				for t, m := range s.Granted {
 					if m > st.Locks[t] {
