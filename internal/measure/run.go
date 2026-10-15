@@ -94,7 +94,10 @@ type Stmt struct {
 	// ended); otherwise sampled every few milliseconds.
 	Locks      map[string]lint.Mode `json:"locks"`
 	LocksExact bool                 `json:"locks_exact"`
-	Rewritten  []string             `json:"rewritten"`
+	// LockSamples counts the pg_locks samples taken while a statement that
+	// could not be wrapped was running. With none, its locks are unknown.
+	LockSamples int      `json:"lock_samples,omitempty"`
+	Rewritten   []string `json:"rewritten"`
 	// Scanned lists tables with at least one sequential scan by this
 	// statement (pg_stat_xact_user_tables / pg_stat_user_tables).
 	Scanned      []string      `json:"scanned"`
@@ -374,7 +377,8 @@ func Measure(ctx context.Context, cfg Config, stmts []sqlparse.Statement) (*Run,
 				waited += s.At - prev.At
 			}
 			prev = s
-			if !st.LocksExact {
+			if !st.LocksExact && s.At >= st.From && s.At <= st.To {
+				st.LockSamples++
 				for t, m := range s.Granted {
 					if m > st.Locks[t] {
 						st.Locks[t] = m

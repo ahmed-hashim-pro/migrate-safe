@@ -161,6 +161,9 @@ func Measurement(w io.Writer, name string, run *measure.Run, verbose bool) {
 		if st.Batches > 0 {
 			facts = append(facts, fmt.Sprintf("%d batches", st.Batches))
 		}
+		if !st.LocksExact && st.LockSamples == 0 && st.Error == "" {
+			facts = append(facts, "too quick for the lock sampler")
+		}
 		for _, t := range sortedKeys(st.Locks) {
 			if st.Locks[t] > lint.AccessShare {
 				facts = append(facts, fmt.Sprintf("%s on %s", st.Locks[t], t))

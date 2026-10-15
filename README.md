@@ -145,7 +145,7 @@ migration one statement at a time:
 
 | Fact | How it is measured |
 | --- | --- |
-| Locks held, per table | Each statement runs inside a transaction, and `pg_locks` is read for the migration's backend before COMMIT, so every lock it held is still there. Wrapping a single statement doesn't change its locking: a lone statement holds its locks until it commits either way. Statements that refuse to run in a transaction (`CONCURRENTLY`, `VACUUM`) are sampled from another session every 5 ms. |
+| Locks held, per table | Each statement runs inside a transaction, and `pg_locks` is read for the migration's backend before COMMIT, so every lock it held is still there. Wrapping a single statement doesn't change its locking: a lone statement holds its locks until it commits either way. Statements that refuse to run in a transaction (`CONCURRENTLY`, `VACUUM`) are sampled from another session every 5 ms; one that finishes between two samples is reported as too quick to observe, and its locks are not compared. |
 | Rewrite | `pg_class.relfilenode` before and after. A rewrite writes the table out to a new file. |
 | Full scan | `seq_scan` in `pg_stat_xact_user_tables` (this transaction's own counters) before and after. For statements outside a transaction, the shared counters after `pg_stat_force_next_flush()` (PostgreSQL 15+). |
 | Rows touched | The command tag. |

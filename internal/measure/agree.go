@@ -51,8 +51,11 @@ func Agree(run *Run) (out []Disagreement, unanalysed []int) {
 				tables[t] = true
 			}
 		}
+		// A statement outside a transaction that finished between two samples
+		// left no trace in pg_locks: its locks can't be compared.
+		locksSeen := st.LocksExact || st.LockSamples > 0
 		for _, t := range sorted(tables) {
-			if r.NewTables[t] {
+			if r.NewTables[t] || !locksSeen {
 				continue
 			}
 			want, got := r.Held[t], st.Locks[t]
