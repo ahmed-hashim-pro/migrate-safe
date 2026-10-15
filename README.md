@@ -93,7 +93,8 @@ What the numbers show:
   lock: `deadlock_timeout`, after which PostgreSQL cancelled the autovacuum
   (the server log says `canceling autovacuum task`). Traffic queued behind the
   ALTER for that second. `lock_timeout = '2s'` allowed it; a shorter timeout
-  would have failed the statement and needed a retry.
+  would have failed the statement and needed a retry. The same 1.0 s wait
+  appeared at 1 million rows.
 - **The linter agreed with every measurement**: for every statement, the
   strongest lock on each table, whether each table was rewritten, whether it
   was scanned, and, in the lock-queue example, whether the statement waited
@@ -117,7 +118,7 @@ make build
 # A throwaway PostgreSQL 17 on port 55432:
 make pg
 
-# Measure all twelve examples on 1,000,000 orders (a few minutes):
+# Measure all twelve examples on 1,000,000 orders (about 3 minutes):
 ./bin/migrate-safe examples --dsn postgres://postgres:pg@localhost:55432/postgres --rows 1000000
 
 # Or one migration against the demo database, with full detail:
