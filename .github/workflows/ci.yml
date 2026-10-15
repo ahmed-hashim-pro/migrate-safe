@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # Unit tests, then the integration tests against a real server: the
+  # statement corpus and every example, each lint prediction checked
+  # against what PostgreSQL actually did.
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        pg: ["16", "17"]
+    services:
+      postgres:
+        image: postgres:${{ matrix.pg }}
+        env:
+          POSTGRES_PASSWORD: pg
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 2s --health-timeout 5s --health-retries 30
+    env:
+      MIGRATE_SAFE_TEST_DSN: postgres://postgres:pg@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+      - run: go vet ./...
+      - run: go test -race -count=1 ./...
+      - name: examples through the CLI, with --check
+        run: |
+          go build -o bin/migrate-safe ./cmd/migrate-safe
+          ./bin/migrate-safe examples --dsn "$MIGRATE_SAFE_TEST_DSN" --rows 200000 --check
+
+  # The newest Go, without a database: build, vet and unit tests.
+  go-stable:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - run: go vet ./...
+      - run: go test -short ./...

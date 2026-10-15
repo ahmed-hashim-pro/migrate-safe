@@ -1,0 +1,2822 @@
+[
+  {
+    "example": "01-create-index",
+    "variant": "unsafe",
+    "lint": "DANGER",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_127536",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 222,
+          "errors": 0,
+          "p50": 15809640,
+          "p99": 23421702,
+          "max": 27137311
+        },
+        "read": {
+          "count": 3224,
+          "errors": 0,
+          "p50": 139172,
+          "p99": 302970,
+          "max": 8314878
+        },
+        "write": {
+          "count": 445,
+          "errors": 0,
+          "p50": 15804057,
+          "p99": 23436564,
+          "max": 27094762
+        }
+      },
+      "from": 2008866284,
+      "to": 3761462865,
+      "overall": {
+        "insert": {
+          "count": 4,
+          "errors": 0,
+          "p50": 1752189201,
+          "p99": 1766649315,
+          "max": 1766649315
+        },
+        "read": {
+          "count": 2661,
+          "errors": 0,
+          "p50": 145748,
+          "p99": 309212,
+          "max": 114581693
+        },
+        "write": {
+          "count": 8,
+          "errors": 0,
+          "p50": 1750248902,
+          "p99": 1766642245,
+          "max": 1766642245
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 2,
+          "sql": "CREATE INDEX orders_account_id_idx ON orders (account_id)",
+          "kind": "CREATE INDEX",
+          "from": 2008866284,
+          "to": 3761462865,
+          "took": 1752596581,
+          "locks": {
+            "orders": 5
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 20187658,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 1752189201,
+              "p99": 1766649315,
+              "max": 1766649315
+            },
+            "read": {
+              "count": 2661,
+              "errors": 0,
+              "p50": 145748,
+              "p99": 309212,
+              "max": 114581693
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 1750248902,
+              "p99": 1766642245,
+              "max": 1766642245
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 1734555529
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "01-create-index",
+    "variant": "safe",
+    "lint": "ok",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_330778",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 240,
+          "errors": 0,
+          "p50": 14546577,
+          "p99": 29961892,
+          "max": 47071545
+        },
+        "read": {
+          "count": 2685,
+          "errors": 0,
+          "p50": 558654,
+          "p99": 1122364,
+          "max": 14951338
+        },
+        "write": {
+          "count": 471,
+          "errors": 0,
+          "p50": 14770623,
+          "p99": 30026183,
+          "max": 47071422
+        }
+      },
+      "from": 2014421538,
+      "to": 4665473137,
+      "overall": {
+        "insert": {
+          "count": 244,
+          "errors": 0,
+          "p50": 15812187,
+          "p99": 92233450,
+          "max": 102421074
+        },
+        "read": {
+          "count": 4176,
+          "errors": 0,
+          "p50": 157790,
+          "p99": 947137,
+          "max": 2311284
+        },
+        "write": {
+          "count": 487,
+          "errors": 0,
+          "p50": 16011239,
+          "p99": 92244566,
+          "max": 102402006
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 4,
+          "sql": "CREATE INDEX CONCURRENTLY orders_account_id_idx ON orders (account_id)",
+          "kind": "CREATE INDEX CONCURRENTLY",
+          "from": 2014421538,
+          "to": 4665473137,
+          "took": 2651051599,
+          "locks": {
+            "orders": 4
+          },
+          "locks_exact": false,
+          "rewritten": null,
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 244,
+              "errors": 0,
+              "p50": 15812187,
+              "p99": 92233450,
+              "max": 102421074
+            },
+            "read": {
+              "count": 4176,
+              "errors": 0,
+              "p50": 157790,
+              "p99": 947137,
+              "max": 2311284
+            },
+            "write": {
+              "count": 487,
+              "errors": 0,
+              "p50": 16011239,
+              "p99": 92244566,
+              "max": 102402006
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "02-add-foreign-key",
+    "variant": "unsafe",
+    "lint": "DANGER",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_289083",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 159,
+          "errors": 0,
+          "p50": 20144341,
+          "p99": 63017880,
+          "max": 74444363
+        },
+        "read": {
+          "count": 2835,
+          "errors": 0,
+          "p50": 321335,
+          "p99": 1328934,
+          "max": 15332348
+        },
+        "write": {
+          "count": 318,
+          "errors": 0,
+          "p50": 20583270,
+          "p99": 62912964,
+          "max": 74462384
+        }
+      },
+      "from": 2014235879,
+      "to": 3043283219,
+      "overall": {
+        "insert": {
+          "count": 4,
+          "errors": 0,
+          "p50": 1040045540,
+          "p99": 1046911499,
+          "max": 1046911499
+        },
+        "read": {
+          "count": 1536,
+          "errors": 0,
+          "p50": 202224,
+          "p99": 1029845,
+          "max": 1598863
+        },
+        "write": {
+          "count": 8,
+          "errors": 0,
+          "p50": 1026900443,
+          "p99": 1046972867,
+          "max": 1046972867
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 2,
+          "sql": "ALTER TABLE orders\n    ADD CONSTRAINT orders_account_id_fkey\n    FOREIGN KEY (account_id) REFERENCES accounts (id)",
+          "kind": "ALTER TABLE",
+          "from": 2014235879,
+          "to": 3043283219,
+          "took": 1029047340,
+          "locks": {
+            "accounts": 6,
+            "orders": 6
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": [
+            "accounts",
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 9890466,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 1040045540,
+              "p99": 1046911499,
+              "max": 1046911499
+            },
+            "read": {
+              "count": 1536,
+              "errors": 0,
+              "p50": 202224,
+              "p99": 1029845,
+              "max": 1598863
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 1026900443,
+              "p99": 1046972867,
+              "max": 1046972867
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 1015595238
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 1014666204
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "02-add-foreign-key",
+    "variant": "safe",
+    "lint": "ok",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_979580",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 273,
+          "errors": 0,
+          "p50": 11137788,
+          "p99": 27829874,
+          "max": 38683824
+        },
+        "read": {
+          "count": 2588,
+          "errors": 0,
+          "p50": 578175,
+          "p99": 1290199,
+          "max": 32068758
+        },
+        "write": {
+          "count": 509,
+          "errors": 0,
+          "p50": 12572183,
+          "p99": 27810425,
+          "max": 38723676
+        }
+      },
+      "from": 2017306381,
+      "to": 2661460092,
+      "overall": {
+        "insert": {
+          "count": 70,
+          "errors": 0,
+          "p50": 15952867,
+          "p99": 30507880,
+          "max": 30507880
+        },
+        "read": {
+          "count": 1022,
+          "errors": 0,
+          "p50": 164211,
+          "p99": 828530,
+          "max": 1223452
+        },
+        "write": {
+          "count": 140,
+          "errors": 0,
+          "p50": 15924121,
+          "p99": 30512113,
+          "max": 41423781
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 4,
+          "sql": "SET lock_timeout = '2s'",
+          "kind": "SET",
+          "from": 2017306381,
+          "to": 2021543888,
+          "took": 4237507,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 21291258,
+              "p99": 21291258,
+              "max": 21291258
+            },
+            "read": {
+              "count": 6,
+              "errors": 0,
+              "p50": 647365,
+              "p99": 856618,
+              "max": 856618
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 21342160,
+              "p99": 21344329,
+              "max": 21344329
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 1,
+          "line": 6,
+          "sql": "ALTER TABLE orders\n    ADD CONSTRAINT orders_account_id_fkey\n    FOREIGN KEY (account_id) REFERENCES accounts (id) NOT VALID",
+          "kind": "ALTER TABLE",
+          "from": 2022747165,
+          "to": 2050662706,
+          "took": 27915541,
+          "locks": {
+            "accounts": 6,
+            "orders": 6
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 19818325,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 30466125,
+              "p99": 30507880,
+              "max": 30507880
+            },
+            "read": {
+              "count": 36,
+              "errors": 0,
+              "p50": 621643,
+              "p99": 1223452,
+              "max": 1223452
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 24426684,
+              "p99": 41423781,
+              "max": 41423781
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 1827422
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 20782907
+            }
+          }
+        },
+        {
+          "index": 2,
+          "line": 10,
+          "sql": "ALTER TABLE orders VALIDATE CONSTRAINT orders_account_id_fkey",
+          "kind": "ALTER TABLE",
+          "from": 2052609468,
+          "to": 2661460092,
+          "took": 608850624,
+          "locks": {
+            "accounts": 2,
+            "orders": 4
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": [
+            "accounts",
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 68,
+              "errors": 0,
+              "p50": 15929656,
+              "p99": 30507880,
+              "max": 30507880
+            },
+            "read": {
+              "count": 979,
+              "errors": 0,
+              "p50": 162285,
+              "p99": 591319,
+              "max": 1150676
+            },
+            "write": {
+              "count": 136,
+              "errors": 0,
+              "p50": 15908767,
+              "p99": 30512113,
+              "max": 41423781
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 16071175
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 16206157
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "03-set-not-null",
+    "variant": "unsafe",
+    "lint": "DANGER",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_300924",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 233,
+          "errors": 0,
+          "p50": 14914615,
+          "p99": 32244497,
+          "max": 33937575
+        },
+        "read": {
+          "count": 2741,
+          "errors": 0,
+          "p50": 491359,
+          "p99": 1201576,
+          "max": 23834506
+        },
+        "write": {
+          "count": 460,
+          "errors": 0,
+          "p50": 15073778,
+          "p99": 32258125,
+          "max": 43594536
+        }
+      },
+      "from": 2017584416,
+      "to": 2404219965,
+      "overall": {
+        "insert": {
+          "count": 4,
+          "errors": 0,
+          "p50": 372294582,
+          "p99": 394935826,
+          "max": 394935826
+        },
+        "read": {
+          "count": 4,
+          "errors": 0,
+          "p50": 384676600,
+          "p99": 384684109,
+          "max": 384684109
+        },
+        "write": {
+          "count": 8,
+          "errors": 0,
+          "p50": 384945339,
+          "p99": 394977621,
+          "max": 394977621
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 2,
+          "sql": "ALTER TABLE orders ALTER COLUMN status SET NOT NULL",
+          "kind": "ALTER TABLE",
+          "from": 2017584416,
+          "to": 2404219965,
+          "took": 386635549,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 14770929,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 372294582,
+              "p99": 394935826,
+              "max": 394935826
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 384676600,
+              "p99": 384684109,
+              "max": 384684109
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 384945339,
+              "p99": 394977621,
+              "max": 394977621
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 376090549,
+              "writes": 375803530
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "03-set-not-null",
+    "variant": "safe",
+    "lint": "ok",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_966131",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 197,
+          "errors": 0,
+          "p50": 16460885,
+          "p99": 106877538,
+          "max": 106904315
+        },
+        "read": {
+          "count": 2931,
+          "errors": 0,
+          "p50": 224521,
+          "p99": 1755546,
+          "max": 13520645
+        },
+        "write": {
+          "count": 395,
+          "errors": 0,
+          "p50": 16502823,
+          "p99": 106868140,
+          "max": 106892931
+        }
+      },
+      "from": 2015784637,
+      "to": 2327987602,
+      "overall": {
+        "insert": {
+          "count": 32,
+          "errors": 0,
+          "p50": 17959165,
+          "p99": 36083511,
+          "max": 36083511
+        },
+        "read": {
+          "count": 391,
+          "errors": 0,
+          "p50": 164821,
+          "p99": 25966407,
+          "max": 26422132
+        },
+        "write": {
+          "count": 60,
+          "errors": 0,
+          "p50": 18535474,
+          "p99": 36786785,
+          "max": 36786785
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 3,
+          "sql": "SET lock_timeout = '2s'",
+          "kind": "SET",
+          "from": 2015784637,
+          "to": 2016814217,
+          "took": 1029580,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 14197163,
+              "p99": 14197163,
+              "max": 14197163
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 198265,
+              "p99": 226896,
+              "max": 226896
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 14145027,
+              "p99": 14150419,
+              "max": 14150419
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 1,
+          "line": 5,
+          "sql": "ALTER TABLE orders\n    ADD CONSTRAINT orders_status_not_null CHECK (status IS NOT NULL) NOT VALID",
+          "kind": "ALTER TABLE",
+          "from": 2017093023,
+          "to": 2037593179,
+          "took": 20500156,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 5338924,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19991528,
+              "p99": 36083511,
+              "max": 36083511
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 18767734,
+              "p99": 18788802,
+              "max": 18788802
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 30680588,
+              "p99": 36078045,
+              "max": 36078045
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 5549868,
+              "writes": 5402110
+            }
+          }
+        },
+        {
+          "index": 2,
+          "line": 8,
+          "sql": "ALTER TABLE orders VALIDATE CONSTRAINT orders_status_not_null",
+          "kind": "ALTER TABLE",
+          "from": 2038322114,
+          "to": 2278883140,
+          "took": 240561026,
+          "locks": {
+            "orders": 4
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 26,
+              "errors": 0,
+              "p50": 17180076,
+              "p99": 36083511,
+              "max": 36083511
+            },
+            "read": {
+              "count": 371,
+              "errors": 0,
+              "p50": 161833,
+              "p99": 785433,
+              "max": 1920558
+            },
+            "write": {
+              "count": 48,
+              "errors": 0,
+              "p50": 20167272,
+              "p99": 36078045,
+              "max": 36078045
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 15693414,
+              "writes": 15814081
+            }
+          }
+        },
+        {
+          "index": 3,
+          "line": 10,
+          "sql": "ALTER TABLE orders ALTER COLUMN status SET NOT NULL",
+          "kind": "ALTER TABLE",
+          "from": 2279573007,
+          "to": 2299649248,
+          "took": 20076241,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 5323780,
+          "workload": {
+            "insert": {
+              "count": 3,
+              "errors": 0,
+              "p50": 24818810,
+              "p99": 32523266,
+              "max": 32523266
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 18167545,
+              "p99": 18208573,
+              "max": 18208573
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 36772064,
+              "p99": 36786785,
+              "max": 36786785
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 7094440,
+              "writes": 6968882
+            }
+          }
+        },
+        {
+          "index": 4,
+          "line": 12,
+          "sql": "ALTER TABLE orders DROP CONSTRAINT orders_status_not_null",
+          "kind": "ALTER TABLE",
+          "from": 2300110140,
+          "to": 2327987602,
+          "took": 27877462,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 20291820,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 31078488,
+              "p99": 32523266,
+              "max": 32523266
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 26405189,
+              "p99": 26422132,
+              "max": 26422132
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 36744147,
+              "p99": 36786785,
+              "max": 36786785
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 27877462,
+              "writes": 27877462
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "04-add-column-volatile-default",
+    "variant": "unsafe",
+    "lint": "DANGER",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_679307",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 206,
+          "errors": 0,
+          "p50": 17083363,
+          "p99": 31374055,
+          "max": 46690027
+        },
+        "read": {
+          "count": 2624,
+          "errors": 0,
+          "p50": 555507,
+          "p99": 1295966,
+          "max": 33557973
+        },
+        "write": {
+          "count": 413,
+          "errors": 0,
+          "p50": 17101441,
+          "p99": 31347083,
+          "max": 46690277
+        }
+      },
+      "from": 2022373297,
+      "to": 52493548185,
+      "overall": {
+        "insert": {
+          "count": 8,
+          "errors": 0,
+          "p50": 28627398,
+          "p99": 50432438840,
+          "max": 50432438840
+        },
+        "read": {
+          "count": 88,
+          "errors": 0,
+          "p50": 170603,
+          "p99": 50418391410,
+          "max": 50418391410
+        },
+        "write": {
+          "count": 16,
+          "errors": 0,
+          "p50": 27677155,
+          "p99": 50419685902,
+          "max": 50419685902
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 2,
+          "sql": "ALTER TABLE orders ADD COLUMN public_id uuid DEFAULT gen_random_uuid()",
+          "kind": "ALTER TABLE",
+          "from": 2022373297,
+          "to": 52493548185,
+          "took": 50471174888,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": [
+            "orders"
+          ],
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 20141706,
+          "workload": {
+            "insert": {
+              "count": 8,
+              "errors": 0,
+              "p50": 28627398,
+              "p99": 50432438840,
+              "max": 50432438840
+            },
+            "read": {
+              "count": 88,
+              "errors": 0,
+              "p50": 170603,
+              "p99": 50418391410,
+              "max": 50418391410
+            },
+            "write": {
+              "count": 16,
+              "errors": 0,
+              "p50": 27677155,
+              "p99": 50419685902,
+              "max": 50419685902
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 50418952381,
+              "writes": 50418338467
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "04-add-column-volatile-default",
+    "variant": "safe",
+    "lint": "ok",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_82030",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 256,
+          "errors": 0,
+          "p50": 13508926,
+          "p99": 22939331,
+          "max": 34023962
+        },
+        "read": {
+          "count": 3161,
+          "errors": 0,
+          "p50": 167231,
+          "p99": 411292,
+          "max": 9880074
+        },
+        "write": {
+          "count": 505,
+          "errors": 0,
+          "p50": 13587086,
+          "p99": 28219619,
+          "max": 34037185
+        }
+      },
+      "from": 2009460081,
+      "to": 184408325125,
+      "overall": {
+        "insert": {
+          "count": 1619,
+          "errors": 0,
+          "p50": 116564247,
+          "p99": 1745526609,
+          "max": 5141570445
+        },
+        "read": {
+          "count": 125633,
+          "errors": 0,
+          "p50": 187647,
+          "p99": 49522383,
+          "max": 3759296540
+        },
+        "write": {
+          "count": 3164,
+          "errors": 0,
+          "p50": 119813732,
+          "p99": 1979507778,
+          "max": 5141525469
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 4,
+          "sql": "SET lock_timeout = '2s'",
+          "kind": "SET",
+          "from": 2009460081,
+          "to": 2010805545,
+          "took": 1345464,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 5648443,
+              "p99": 5648443,
+              "max": 5648443
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 392998,
+              "p99": 546605,
+              "max": 546605
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 5782383,
+              "p99": 5820832,
+              "max": 5820832
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 1,
+          "line": 6,
+          "sql": "ALTER TABLE orders ADD COLUMN public_id uuid",
+          "kind": "ALTER TABLE",
+          "from": 2011104810,
+          "to": 2021110113,
+          "took": 10005303,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 4609426,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 9950504,
+              "p99": 9996180,
+              "max": 9996180
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 8928558,
+              "p99": 8928757,
+              "max": 8928757
+            },
+            "write": {
+              "count": 6,
+              "errors": 0,
+              "p50": 9944345,
+              "p99": 12694724,
+              "max": 12694724
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "line": 8,
+          "sql": "ALTER TABLE orders ALTER COLUMN public_id SET DEFAULT gen_random_uuid()",
+          "kind": "ALTER TABLE",
+          "from": 2021700169,
+          "to": 2033129535,
+          "took": 11429366,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 10431877,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 14231395,
+              "p99": 14272751,
+              "max": 14272751
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 9053714,
+              "p99": 9060952,
+              "max": 9060952
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 12675667,
+              "p99": 18134237,
+              "max": 18134237
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 5660172,
+              "writes": 5525719
+            }
+          }
+        },
+        {
+          "index": 3,
+          "line": 11,
+          "sql": "UPDATE orders SET public_id = gen_random_uuid()\nWHERE id \u003e= :lo AND id \u003c :hi AND public_id IS NULL",
+          "kind": "UPDATE",
+          "from": 2033386846,
+          "to": 184408325125,
+          "took": 182374938279,
+          "locks": {
+            "orders": 3
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 5000260,
+          "batches": 251,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 1615,
+              "errors": 0,
+              "p50": 117019493,
+              "p99": 1745526609,
+              "max": 5141570445
+            },
+            "read": {
+              "count": 125621,
+              "errors": 0,
+              "p50": 187635,
+              "p99": 49522383,
+              "max": 3759296540
+            },
+            "write": {
+              "count": 3156,
+              "errors": 0,
+              "p50": 120188987,
+              "p99": 1979507778,
+              "max": 5141525469
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 13463083,
+              "writes": 13503782
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "05-change-column-type",
+    "variant": "unsafe",
+    "lint": "DANGER",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_19787",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 154,
+          "errors": 0,
+          "p50": 20934279,
+          "p99": 130442610,
+          "max": 130456853
+        },
+        "read": {
+          "count": 2959,
+          "errors": 0,
+          "p50": 237119,
+          "p99": 1610914,
+          "max": 8404962
+        },
+        "write": {
+          "count": 309,
+          "errors": 0,
+          "p50": 20892182,
+          "p99": 124252128,
+          "max": 130486222
+        }
+      },
+      "from": 2020488152,
+      "to": 35896451217,
+      "overall": {
+        "insert": {
+          "count": 11,
+          "errors": 0,
+          "p50": 16041405,
+          "p99": 33813995421,
+          "max": 33813995421
+        },
+        "read": {
+          "count": 112,
+          "errors": 0,
+          "p50": 158747,
+          "p99": 33803587294,
+          "max": 33803596036
+        },
+        "write": {
+          "count": 22,
+          "errors": 0,
+          "p50": 16045500,
+          "p99": 33813917130,
+          "max": 33813917130
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 2,
+          "sql": "ALTER TABLE orders ALTER COLUMN amount_cents TYPE bigint",
+          "kind": "ALTER TABLE",
+          "from": 2020488152,
+          "to": 35896451217,
+          "took": 33875963065,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": [
+            "orders"
+          ],
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 14736998,
+          "workload": {
+            "insert": {
+              "count": 11,
+              "errors": 0,
+              "p50": 16041405,
+              "p99": 33813995421,
+              "max": 33813995421
+            },
+            "read": {
+              "count": 112,
+              "errors": 0,
+              "p50": 158747,
+              "p99": 33803587294,
+              "max": 33803596036
+            },
+            "write": {
+              "count": 22,
+              "errors": 0,
+              "p50": 16045500,
+              "p99": 33813917130,
+              "max": 33813917130
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 33800544995,
+              "writes": 33801157875
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "05-change-column-type",
+    "variant": "safe",
+    "lint": "ok",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_716532",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 198,
+          "errors": 0,
+          "p50": 17409499,
+          "p99": 37749204,
+          "max": 45748921
+        },
+        "read": {
+          "count": 2661,
+          "errors": 0,
+          "p50": 543153,
+          "p99": 1219871,
+          "max": 31730475
+        },
+        "write": {
+          "count": 394,
+          "errors": 0,
+          "p50": 17908055,
+          "p99": 45823769,
+          "max": 45892919
+        }
+      },
+      "from": 2026583464,
+      "to": 202118062928,
+      "overall": {
+        "insert": {
+          "count": 2133,
+          "errors": 0,
+          "p50": 84671954,
+          "p99": 2088656828,
+          "max": 9703816598
+        },
+        "read": {
+          "count": 120812,
+          "errors": 0,
+          "p50": 316962,
+          "p99": 65657596,
+          "max": 9366340426
+        },
+        "write": {
+          "count": 4121,
+          "errors": 0,
+          "p50": 86255329,
+          "p99": 2118804608,
+          "max": 10479431809
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 4,
+          "sql": "SET lock_timeout = '2s'",
+          "kind": "SET",
+          "from": 2026583464,
+          "to": 2030723211,
+          "took": 4139747,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 15812804,
+              "p99": 15812804,
+              "max": 15812804
+            },
+            "read": {
+              "count": 7,
+              "errors": 0,
+              "p50": 717099,
+              "p99": 963141,
+              "max": 963141
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 15736965,
+              "p99": 15868387,
+              "max": 15868387
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 1,
+          "line": 6,
+          "sql": "ALTER TABLE orders ADD COLUMN amount_cents_new bigint",
+          "kind": "ALTER TABLE",
+          "from": 2031967453,
+          "to": 2054753625,
+          "took": 22786172,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 5233937,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 22251109,
+              "p99": 45347159,
+              "max": 45347159
+            },
+            "read": {
+              "count": 8,
+              "errors": 0,
+              "p50": 20480422,
+              "p99": 20569626,
+              "max": 20569626
+            },
+            "write": {
+              "count": 6,
+              "errors": 0,
+              "p50": 45615341,
+              "p99": 54215684,
+              "max": 54215684
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 19137345,
+              "writes": 18610405
+            }
+          }
+        },
+        {
+          "index": 2,
+          "line": 8,
+          "sql": "CREATE FUNCTION orders_amount_cents_sync() RETURNS trigger\nLANGUAGE plpgsql AS $$\nBEGIN\n    NEW.amount_cents_new := NEW.amount_cents;\n    RETURN NEW;\nEND\n$$",
+          "kind": "CREATE FUNCTION",
+          "from": 2057099428,
+          "to": 2094017740,
+          "took": 36918312,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 26290252,
+              "p99": 45347159,
+              "max": 45347159
+            },
+            "read": {
+              "count": 45,
+              "errors": 0,
+              "p50": 622309,
+              "p99": 1428056,
+              "max": 1428056
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 45402351,
+              "p99": 54215684,
+              "max": 54215684
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 3,
+          "line": 16,
+          "sql": "CREATE TRIGGER orders_amount_cents_sync\n    BEFORE INSERT OR UPDATE ON orders\n    FOR EACH ROW EXECUTE FUNCTION orders_amount_cents_sync()",
+          "kind": "CREATE TRIGGER",
+          "from": 2096716554,
+          "to": 2119496808,
+          "took": 22780254,
+          "locks": {
+            "orders": 6
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 9268946,
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 15466483,
+              "p99": 36567216,
+              "max": 36567216
+            },
+            "read": {
+              "count": 32,
+              "errors": 0,
+              "p50": 538211,
+              "p99": 868806,
+              "max": 868806
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 36534919,
+              "p99": 36656499,
+              "max": 36656499
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 3716161
+            }
+          }
+        },
+        {
+          "index": 4,
+          "line": 21,
+          "sql": "UPDATE orders SET amount_cents_new = amount_cents\nWHERE id \u003e= :lo AND id \u003c :hi AND amount_cents_new IS NULL",
+          "kind": "UPDATE",
+          "from": 2120680161,
+          "to": 200502296262,
+          "took": 198381616101,
+          "locks": {
+            "orders": 3
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 4998115,
+          "batches": 251,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2091,
+              "errors": 0,
+              "p50": 85809458,
+              "p99": 2118741954,
+              "max": 9703816598
+            },
+            "read": {
+              "count": 119786,
+              "errors": 0,
+              "p50": 319901,
+              "p99": 68397866,
+              "max": 9366340426
+            },
+            "write": {
+              "count": 4044,
+              "errors": 0,
+              "p50": 87519162,
+              "p99": 2118815149,
+              "max": 10479431809
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 15197362
+            }
+          }
+        },
+        {
+          "index": 5,
+          "line": 24,
+          "sql": "ALTER TABLE orders\n    ADD CONSTRAINT orders_amount_cents_new_not_null\n    CHECK (amount_cents_new IS NOT NULL) NOT VALID",
+          "kind": "ALTER TABLE",
+          "from": 200503157250,
+          "to": 201510618120,
+          "took": 1007460870,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 999679280,
+          "workload": {
+            "insert": {
+              "count": 3,
+              "errors": 0,
+              "p50": 995790169,
+              "p99": 1015697905,
+              "max": 1015697905
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 1007501641,
+              "p99": 1007725282,
+              "max": 1007725282
+            },
+            "write": {
+              "count": 5,
+              "errors": 0,
+              "p50": 1015684669,
+              "p99": 1016795480,
+              "max": 1016795480
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 994208920,
+              "writes": 993812366
+            }
+          }
+        },
+        {
+          "index": 6,
+          "line": 28,
+          "sql": "ALTER TABLE orders VALIDATE CONSTRAINT orders_amount_cents_new_not_null",
+          "kind": "ALTER TABLE",
+          "from": 201513108281,
+          "to": 202076187176,
+          "took": 563078895,
+          "locks": {
+            "orders": 4
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": [
+            "orders"
+          ],
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 32,
+              "errors": 0,
+              "p50": 24512439,
+              "p99": 1015697905,
+              "max": 1015697905
+            },
+            "read": {
+              "count": 895,
+              "errors": 0,
+              "p50": 153123,
+              "p99": 806674,
+              "max": 2366978
+            },
+            "write": {
+              "count": 61,
+              "errors": 0,
+              "p50": 23683318,
+              "p99": 1016795480,
+              "max": 1016795480
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 2844048,
+              "writes": 3062842
+            }
+          }
+        },
+        {
+          "index": 7,
+          "line": 30,
+          "sql": "BEGIN",
+          "kind": "BEGIN",
+          "from": 202076199579,
+          "to": 202076269806,
+          "took": 70227,
+          "locks": {},
+          "locks_exact": false,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": false,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 0,
+              "errors": 0,
+              "p50": 0,
+              "p99": 0,
+              "max": 0
+            },
+            "read": {
+              "count": 0,
+              "errors": 0,
+              "p50": 0,
+              "p99": 0,
+              "max": 0
+            },
+            "write": {
+              "count": 1,
+              "errors": 0,
+              "p50": 12483527,
+              "p99": 12483527,
+              "max": 12483527
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 8,
+          "line": 31,
+          "sql": "ALTER TABLE orders ALTER COLUMN amount_cents_new SET NOT NULL",
+          "kind": "ALTER TABLE",
+          "from": 202076640233,
+          "to": 202086387498,
+          "took": 9747265,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 4324497,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 39118562,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19677270,
+              "p99": 19719171,
+              "max": 19719171
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 9,
+          "line": 32,
+          "sql": "ALTER TABLE orders DROP CONSTRAINT orders_amount_cents_new_not_null",
+          "kind": "ALTER TABLE",
+          "from": 202086885004,
+          "to": 202087175310,
+          "took": 290306,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 39118562,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19677270,
+              "p99": 19719171,
+              "max": 19719171
+            },
+            "write": {
+              "count": 3,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 10,
+          "line": 33,
+          "sql": "DROP TRIGGER orders_amount_cents_sync ON orders",
+          "kind": "DROP TRIGGER",
+          "from": 202087689931,
+          "to": 202087792513,
+          "took": 102582,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 39118562,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19677270,
+              "p99": 19719171,
+              "max": 19719171
+            },
+            "write": {
+              "count": 3,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 11,
+          "line": 34,
+          "sql": "ALTER TABLE orders DROP COLUMN amount_cents",
+          "kind": "ALTER TABLE",
+          "from": 202088214264,
+          "to": 202088373807,
+          "took": 159543,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 39118562,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19677270,
+              "p99": 19719171,
+              "max": 19719171
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 12,
+          "line": 35,
+          "sql": "ALTER TABLE orders RENAME COLUMN amount_cents_new TO amount_cents",
+          "kind": "ALTER TABLE",
+          "from": 202088787039,
+          "to": 202088840535,
+          "took": 53496,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 39118562,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19677270,
+              "p99": 19719171,
+              "max": 19719171
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 13,
+          "line": 36,
+          "sql": "COMMIT",
+          "kind": "COMMIT",
+          "from": 202089095673,
+          "to": 202097187994,
+          "took": 8092321,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": false,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": false,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 39118562,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 19677270,
+              "p99": 19719171,
+              "max": 19719171
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 1513153,
+              "writes": 1311214
+            }
+          }
+        },
+        {
+          "index": 14,
+          "line": 38,
+          "sql": "DROP FUNCTION orders_amount_cents_sync()",
+          "kind": "DROP FUNCTION",
+          "from": 202097759812,
+          "to": 202118062928,
+          "took": 20303116,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 3,
+              "errors": 0,
+              "p50": 26407193,
+              "p99": 39118562,
+              "max": 39118562
+            },
+            "read": {
+              "count": 28,
+              "errors": 0,
+              "p50": 409807,
+              "p99": 867011,
+              "max": 867011
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 39087292,
+              "p99": 39194178,
+              "max": 39194178
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 18352940,
+              "writes": 18647203
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "06-lock-queue",
+    "variant": "unsafe",
+    "lint": "RISK",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_230118",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 241,
+          "errors": 0,
+          "p50": 14435064,
+          "p99": 23570582,
+          "max": 24638310
+        },
+        "read": {
+          "count": 2655,
+          "errors": 0,
+          "p50": 566755,
+          "p99": 1220901,
+          "max": 9544874
+        },
+        "write": {
+          "count": 460,
+          "errors": 0,
+          "p50": 14921912,
+          "p99": 24741678,
+          "max": 24911552
+        }
+      },
+      "from": 3035666764,
+      "to": 10037571805,
+      "overall": {
+        "insert": {
+          "count": 4,
+          "errors": 0,
+          "p50": 7002372363,
+          "p99": 7018303031,
+          "max": 7018303031
+        },
+        "read": {
+          "count": 7,
+          "errors": 0,
+          "p50": 6999235831,
+          "p99": 7002083745,
+          "max": 7002083745
+        },
+        "write": {
+          "count": 8,
+          "errors": 0,
+          "p50": 7018287163,
+          "p99": 7018594512,
+          "max": 7018594512
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 5,
+          "sql": "ALTER TABLE orders ADD COLUMN priority smallint NOT NULL DEFAULT 0",
+          "kind": "ALTER TABLE",
+          "from": 3035666764,
+          "to": 10037571805,
+          "took": 7001905041,
+          "locks": {
+            "orders": 8
+          },
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 6985571696,
+          "long_reader": {
+            "table": "orders",
+            "from": 2021521526,
+            "hold": 8000000000
+          },
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 7002372363,
+              "p99": 7018303031,
+              "max": 7018303031
+            },
+            "read": {
+              "count": 7,
+              "errors": 0,
+              "p50": 6999235831,
+              "p99": 7002083745,
+              "max": 7002083745
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 7018287163,
+              "p99": 7018594512,
+              "max": 7018594512
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 6989866549,
+              "writes": 6989315694
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  },
+  {
+    "example": "06-lock-queue",
+    "variant": "safe",
+    "lint": "ok",
+    "measurement": {
+      "server": "17.11 (Debian 17.11-1.pgdg13+2)",
+      "pg_major": 17,
+      "source_database": "migrate_safe_demo",
+      "database": "migrate_safe_demo_shadow_232382",
+      "rows": {
+        "accounts": 100000,
+        "orders": 5000080
+      },
+      "workload_classes": [
+        "read",
+        "write",
+        "insert"
+      ],
+      "workers": {
+        "insert": 2,
+        "read": 4,
+        "write": 4
+      },
+      "baseline": {
+        "insert": {
+          "count": 237,
+          "errors": 0,
+          "p50": 14502602,
+          "p99": 25550245,
+          "max": 50164796
+        },
+        "read": {
+          "count": 2574,
+          "errors": 0,
+          "p50": 581747,
+          "p99": 1207181,
+          "max": 34507520
+        },
+        "write": {
+          "count": 461,
+          "errors": 0,
+          "p50": 14678765,
+          "p99": 25574337,
+          "max": 50101822
+        }
+      },
+      "from": 2028868095,
+      "to": 3245196291,
+      "overall": {
+        "insert": {
+          "count": 125,
+          "errors": 0,
+          "p50": 14888449,
+          "p99": 188691882,
+          "max": 203161450
+        },
+        "read": {
+          "count": 1397,
+          "errors": 0,
+          "p50": 473055,
+          "p99": 1959035,
+          "max": 200129116
+        },
+        "write": {
+          "count": 241,
+          "errors": 0,
+          "p50": 15206113,
+          "p99": 203048936,
+          "max": 203221125
+        }
+      },
+      "statements": [
+        {
+          "index": 0,
+          "line": 4,
+          "sql": "SET lock_timeout = '200ms'",
+          "kind": "SET",
+          "from": 2028868095,
+          "to": 2031450179,
+          "took": 2582084,
+          "locks": {},
+          "locks_exact": true,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": true,
+          "rows_affected": 0,
+          "lock_wait": 0,
+          "workload": {
+            "insert": {
+              "count": 2,
+              "errors": 0,
+              "p50": 17316607,
+              "p99": 17316607,
+              "max": 17316607
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 337566,
+              "p99": 375762,
+              "max": 375762
+            },
+            "write": {
+              "count": 4,
+              "errors": 0,
+              "p50": 17313228,
+              "p99": 17380630,
+              "max": 17380630
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 0,
+              "writes": 0
+            }
+          }
+        },
+        {
+          "index": 1,
+          "line": 8,
+          "sql": "ALTER TABLE orders ADD COLUMN priority smallint NOT NULL DEFAULT 0",
+          "kind": "ALTER TABLE",
+          "from": 3043909435,
+          "to": 3245196291,
+          "took": 201286856,
+          "locks": {},
+          "locks_exact": false,
+          "rewritten": null,
+          "scanned": null,
+          "scan_measured": false,
+          "rows_affected": 0,
+          "lock_wait": 194767108,
+          "error": "ERROR: canceling statement due to lock timeout (SQLSTATE 55P03)",
+          "error_code": "55P03",
+          "error_expected": true,
+          "long_reader": {
+            "table": "orders",
+            "from": 2041156856,
+            "hold": 8000000000
+          },
+          "workload": {
+            "insert": {
+              "count": 4,
+              "errors": 0,
+              "p50": 188691882,
+              "p99": 203161450,
+              "max": 203161450
+            },
+            "read": {
+              "count": 4,
+              "errors": 0,
+              "p50": 200101823,
+              "p99": 200129116,
+              "max": 200129116
+            },
+            "write": {
+              "count": 8,
+              "errors": 0,
+              "p50": 194101996,
+              "p99": 203221125,
+              "max": 203221125
+            }
+          },
+          "blocked": {
+            "accounts": {
+              "reads": 0,
+              "writes": 0
+            },
+            "orders": {
+              "reads": 181839879,
+              "writes": 181359666
+            }
+          }
+        }
+      ],
+      "tables": [
+        "accounts",
+        "orders"
+      ]
+    },
+    "lint_disagreements": null
+  }
+]

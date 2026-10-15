@@ -1,0 +1,16 @@
+
+example                         variant  lint    took                             reads locked out  writes locked out  longest query  rewrote  lint agrees
+01-create-index                 unsafe   DANGER  1.75 s                           0.0 ms            1.73 s             1.77 s         -        yes
+                                safe     ok      2.65 s                           0.0 ms            0.0 ms             102 ms         -        yes
+02-add-foreign-key              unsafe   DANGER  1.03 s                           0.0 ms            1.02 s             1.05 s         -        yes
+                                safe     ok      644 ms                           0.0 ms            38 ms              41 ms          -        yes
+03-set-not-null                 unsafe   DANGER  386 ms                           376 ms            375 ms             394 ms         -        yes
+                                safe     ok      312 ms                           57 ms             57 ms              36 ms          -        yes
+04-add-column-volatile-default  unsafe   DANGER  50.47 s                          50.42 s           50.42 s            50.43 s        orders   yes
+                                safe     ok      182.40 s                         19 ms             19 ms              5.14 s         -        yes
+05-change-column-type           unsafe   DANGER  33.88 s                          33.80 s           33.80 s            33.81 s        orders   yes
+                                safe     ok      200.09 s                         1.04 s            1.06 s             10.48 s        -        yes
+06-lock-queue                   unsafe   RISK    7.00 s                           6.99 s            6.99 s             7.02 s         -        yes
+                                safe     ok      1.22 s (timed out, as intended)  181 ms            181 ms             203 ms         -        yes
+
+lint agreed with every measured lock, rewrite, scan and lock-queue wait
