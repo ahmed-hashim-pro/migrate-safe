@@ -1,10 +1,10 @@
 # Uses a local Go toolchain if there is one, otherwise golang:1.25 in Docker.
 GO_LOCAL := $(shell command -v go 2>/dev/null)
 ifeq ($(GO_LOCAL),)
-GO = docker run --rm --network host -u $$(id -u):$$(id -g) -e HOME=/tmp -e GOFLAGS=-buildvcs=false \
+GO = docker run --rm --network host -u $$(id -u):$$(id -g) -e HOME=/tmp -e GOFLAGS=-buildvcs=false -e CGO_ENABLED=0 \
 	-e MIGRATE_SAFE_TEST_DSN -v $(CURDIR):/w -w /w golang:1.25 go
 else
-GO = go
+GO = CGO_ENABLED=0 go
 endif
 
 PG_VERSION ?= 17
@@ -14,6 +14,7 @@ ROWS       ?= 2000000
 
 .PHONY: build test pg pg-stop integration examples docs demo check clean
 
+# A static binary, so one built in the golang image runs on any Linux host.
 build:
 	$(GO) build -o bin/migrate-safe ./cmd/migrate-safe
 
